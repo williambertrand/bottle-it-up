@@ -1,0 +1,113 @@
+{
+  "displayName": "Testy Groceries",
+  "aisles": [
+    {
+      "name": "produce",
+      "shelfCount": 5,
+        "itemLocations": [
+            {
+                "item": "tomato",
+                "shelf": 0
+            },
+            {
+                "item": "cucumber",
+                "shelf": 1
+            },
+            {
+                "item": "eggplant",
+                "shelf": 3
+            },
+            {
+                "item": "mushroom",
+                "shelf": 4
+            }
+        ]
+    },
+    {
+      "name": "frozen",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "pizza",
+          "shelf": 0
+        },
+        {
+            "item": "iceCream",
+            "shelf": 2
+        },
+        {
+            "item": "frozen_veg",
+            "shelf": 4
+        }
+      ]
+    },
+    {
+      "name": "cereal",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "cereal",
+          "shelf": 0
+        },
+        {
+          "item": "oatmeal",
+          "shelf": 2
+        },
+        {
+          "item": "cookies",
+          "shelf": 4
+        }
+      ]
+    },
+    {
+      "name": "drinks",
+      "shelfCount": 5,
+        "itemLocations": [
+            {
+                "item": "soda",
+                "shelf": 1
+            },
+            {
+                "item": "water",
+                "shelf": 3
+            },
+            {
+                "item": "gatorade",
+                "shelf": 4
+            }
+        ]
+    },
+    {
+        "name": "canned",
+        "shelfCount": 5,
+        "itemLocations": [
+            {
+                "item": "soup",
+                "shelf": 1
+            },
+            {
+                "item": "fruit",
+                "shelf": 2
+            }
+        ]
+    },
+    {
+      "name": "dairy",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "eggs",
+          "shelf": 1
+        },
+        {
+            "item": "cheese",
+            "shelf": 2
+        },
+        {
+            "item": "yogurt",
+            "shelf": 4
+        }
+      ]
+    }
+  ]
+}
