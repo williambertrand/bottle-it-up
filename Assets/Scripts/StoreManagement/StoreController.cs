@@ -129,7 +129,10 @@ public class StoreController : MonoBehaviour
 
     public Store store;
     public string StoreName;
+
+    //Navigation points to be set
     public Transform exitPoint;
+    public Transform checkoutPoint;
 
     public static StoreController Instance;
 

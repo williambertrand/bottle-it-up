@@ -16,6 +16,7 @@ namespace HumanStateManagement
          */
         public string nextItem; //next item on the shopper's list
         public int basketSize; //Number of shopping items collected
+        public int listSize; //number of items on this shopper's list
 
 
         //The human's states:
@@ -23,6 +24,9 @@ namespace HumanStateManagement
         public AtRestHumanState atRest;
         public MoveToItemHumanState moveToItem;
         public CollectItemHumanState collectItem;
+        public MoveToCheckoutHumanState moveToCheckout;
+        public PayAtCheckoutHumanState payAtCheckout;
+        public ExitStoreHumanState exitStore;
 
         // Start is called before the first frame update
         void Start()
@@ -32,10 +36,15 @@ namespace HumanStateManagement
             atRest = new AtRestHumanState(this, stateMachine);
             moveToItem = new MoveToItemHumanState(this, stateMachine);
             collectItem = new CollectItemHumanState(this, stateMachine);
+            moveToCheckout = new MoveToCheckoutHumanState(this, stateMachine);
+            payAtCheckout = new PayAtCheckoutHumanState(this, stateMachine);
+            exitStore = new ExitStoreHumanState(this, stateMachine);
 
             stateMachine.Initialize(atRest);
 
             agent = GetComponent<NavMeshAgent>();
+
+            listSize = (int)Random.Range(3, 8);
 
             //Add small random delays for shoppers to get moving
             StartCoroutine(WakeUpAfter(Random.Range(0.75f, 2.5f)));
@@ -52,10 +61,6 @@ namespace HumanStateManagement
         public void OnFinishPickup()
         {
             basketSize++;
-
-            //TODO: either get another item or go to checkout
-            nextItem = StoreController.Instance.store.GetRandomItem();
-            agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
         }
 
 

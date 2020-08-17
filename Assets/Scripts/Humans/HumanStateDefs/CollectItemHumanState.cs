@@ -42,8 +42,14 @@ namespace HumanStateManagement
             {
                 human.OnFinishPickup();
                 //if (human.nextItem) {}
-                //else stateMachine.ChangeState(human.moveToCheckout);
-                stateMachine.ChangeState(human.moveToItem);
+                if (human.basketSize == human.listSize)
+                {
+                    stateMachine.ChangeState(human.moveToCheckout);
+                }
+                else
+                {
+                    stateMachine.ChangeState(human.moveToItem);
+                }
             }
 
         }
