@@ -16,8 +16,6 @@ namespace HumanStateManagement
         public override void Enter()
         {
             base.Enter();
-            human.nextItem = StoreController.Instance.store.GetRandomItem();
-            human.agent.destination = StoreController.Instance.store.GetItemLocation(human.nextItem);
         }
 
         public override void Exit()

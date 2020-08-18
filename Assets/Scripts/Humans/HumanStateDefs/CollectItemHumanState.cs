@@ -41,7 +41,6 @@ namespace HumanStateManagement
             if (Time.time > startTime + timeToCollect)
             {
                 human.OnFinishPickup();
-                //if (human.nextItem) {}
                 if (human.basketSize == human.listSize)
                 {
                     stateMachine.ChangeState(human.moveToCheckout);
