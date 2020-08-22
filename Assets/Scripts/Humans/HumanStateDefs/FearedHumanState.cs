@@ -8,13 +8,14 @@ namespace HumanStateManagement
     //TODO: Should probably define a MovingState that we inherit from for moving to item, to checkout, or to exit
     public class FearedHumanState : HumanState
     {
+        GameObject player;
 
         public FearedHumanState(
             Human human,
             HumanStateHandler stateMachine,
             GameObject Player) : base(human, stateMachine)
         {
-
+            player = Player;
         }
 
         public override void Enter()
@@ -24,11 +25,13 @@ namespace HumanStateManagement
 
             float fearedRadius = 12.0f;
 
+            Vector3 dirFromPlayer = (human.transform.position - player.transform.position).normalized;
+            Vector3 runDirection = Quaternion.Euler(0, 0, Random.Range(-50f, 50f)) * dirFromPlayer;
+            Vector3 runDest = runDirection * fearedRadius + human.transform.position;
+            Debug.DrawLine(player.transform.position, human.transform.position + dirFromPlayer * fearedRadius, Color.blue, 2.0f);
 
-            Vector3 randomDirection = Random.insideUnitSphere * fearedRadius;
-            randomDirection += human.transform.position;
             NavMeshHit hit;
-            NavMesh.SamplePosition(randomDirection, out hit, fearedRadius, 1);
+            NavMesh.SamplePosition(runDest, out hit, fearedRadius, 1);
             Vector3 finalPosition = hit.position;
 
             human.agent.speed = Human.HUMAN_RUN_SPEED;
@@ -41,6 +44,7 @@ namespace HumanStateManagement
         public override void Exit()
         {
             base.Exit();
+            human.agent.speed = Human.BASE_HUMAN_SPEEED;
         }
 
         public override void Update()

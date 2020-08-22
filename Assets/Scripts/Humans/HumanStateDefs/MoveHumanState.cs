@@ -5,10 +5,12 @@ using UnityEngine;
 namespace HumanStateManagement
 {
     //TODO: Should probably define a MovingState that we inherit from for moving to item, to checkout, or to exit
-    public class MoveToItemHumanState : MoveHumanState
+    public class MoveHumanState : HumanState
     {
 
-        public MoveToItemHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
+        private Vector3 navDest;
+
+        public MoveHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
         {
 
         }
@@ -26,25 +28,26 @@ namespace HumanStateManagement
         public override void Pause()
         {
             base.Pause();
+
+            //Save the navmesh destination for when we resume this state
+            navDest = human.agent.destination;
+
         }
 
         public override void Resume()
         {
             base.Resume();
+            human.agent.destination = navDest;
         }
 
         public override void Update()
         {
             base.Update();
-
-            //TODO: Check if human has reached its destination
-            if (!human.agent.pathPending && human.agent.remainingDistance < 0.6f)
-                stateMachine.ChangeState(human.collectItem);
         }
 
         public override string ToString()
         {
-            return "MoveToItem";
+            return "Move";
         }
 
     }

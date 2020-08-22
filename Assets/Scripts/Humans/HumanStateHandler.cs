@@ -21,25 +21,32 @@ namespace HumanStateManagement
         public void ChangeState(HumanState newState)
         {
             CurrentState.Exit();
-
             CurrentState = newState;
             newState.Enter();
         }
 
+        //Use "pause" state when we plan to come right back to the old state
+        //This is like a temporary Override of a state
         public void PushState(HumanState newState)
         {
+            CurrentState.Pause();
             stateStack.Push(CurrentState);
-            ChangeState(newState);
+            CurrentState = newState;
+            newState.Enter();
         }
 
         public void PopState()
         {
+            CurrentState.Exit();
+
             if (stateStack.Count == 0)
             {
                 throw new Exception("Trying to pop from an empty state stack");
             }
             HumanState prevState = stateStack.Pop();
-            ChangeState(prevState);
+            CurrentState = prevState;
+            prevState.Resume();
         }
+
     }
 }
