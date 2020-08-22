@@ -52,6 +52,11 @@ namespace HumanStateManagement
             }
 
         }
+
+        public override string ToString()
+        {
+            return "Collecting";
+        }
     }
 }
 

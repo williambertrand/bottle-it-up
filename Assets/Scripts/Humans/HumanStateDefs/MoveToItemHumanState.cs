@@ -32,5 +32,10 @@ namespace HumanStateManagement
                 stateMachine.ChangeState(human.collectItem);
         }
 
+        public override string ToString()
+        {
+            return "MoveToItem";
+        }
+
     }
 }

@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 
 
 namespace HumanStateManagement
 {
     public class Human : MonoBehaviour
     {
+
+        public static float HUMAN_RUN_SPEED = 10.0f;
+
         //Nav fields... public because we read from this in state machines
         public NavMeshAgent agent;
 
@@ -30,6 +34,8 @@ namespace HumanStateManagement
         public PayAtCheckoutHumanState payAtCheckout;
         public ExitStoreHumanState exitStore;
 
+        public FearedHumanState fearedState;
+
         //NOTE: When a state does not rely on any particulars of the human
         //      for which it is being used, it should be defined as a static state.
         //      TODO: ExitStore should be able to be static if we set the human nav agent destination in the patAtCheckout state exit
@@ -46,14 +52,19 @@ namespace HumanStateManagement
             payAtCheckout = new PayAtCheckoutHumanState(this, stateMachine);
             exitStore = new ExitStoreHumanState(this, stateMachine);
 
+
+            HumanSight sight = GetComponent<HumanSight>();
+
+            fearedState = new FearedHumanState(this, stateMachine, sight.player);
+
             stateMachine.Initialize(atRest);
 
             agent = GetComponent<NavMeshAgent>();
 
             listSize = Random.Range(3, 8);
 
-            //Add small random delays for shoppers to get moving
-            StartCoroutine(WakeUpAfter(Random.Range(0.75f, 2.5f)));
+            //Useful for testing: Add time delay for shoppers to get moving
+            StartCoroutine(WakeUpAfter(0.25f));
 
         }
 
@@ -91,6 +102,12 @@ namespace HumanStateManagement
             nextItem = StoreController.Instance.store.GetRandomItem();
             agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
 
+        }
+
+        private void OnDrawGizmos()
+        {
+            string currentStateStr = stateMachine.CurrentState.ToString();
+            Handles.Label(transform.position + transform.up * 1.5f, currentStateStr);
         }
     }
 
