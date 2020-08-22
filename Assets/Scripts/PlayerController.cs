@@ -6,12 +6,15 @@ using extensions;
 
 public class PlayerController : MonoBehaviorWithInputs
 {
+    public static PlayerController Instance; 
     private Vector3 _moveInput = Vector3.zero;
     private Rigidbody _rb;
     public float moveSpeed = 3;
 
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+        
         _rb = GetComponent<Rigidbody>();
         InputActions.Base.Let(i =>
         {

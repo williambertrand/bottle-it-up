@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - human
+  - Canvas
   layers:
   - Default
   - TransparentFX
