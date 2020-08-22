@@ -25,12 +25,14 @@ namespace UI
         private Dictionary<CanvasType, CanvasController> _canvasControllers;
 
         private CanvasType? _previousCanvas;
+
+        public CanvasType startScreen = CanvasType.MainMenu;
     
         private void Awake()
         {
             _canvasControllers = GetComponentsInChildren<CanvasController>(true).ToDict(x => x.canvasType, x => x);
 
-            SetActiveCanvas(CanvasType.MainMenu);
+            SetActiveCanvas(startScreen);
         }
 
         private void SetActiveCanvas(CanvasType? type)

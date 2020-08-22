@@ -25,6 +25,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Balance"",
+                    ""type"": ""Value"",
+                    ""id"": ""48cf4c10-ed55-4dee-aba8-62acf37f1ea3"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": ""Clamp(min=-1,max=1)"",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -137,6 +145,39 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrow Keys"",
+                    ""id"": ""988d7e57-a0f2-4558-843c-7a471d794a60"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Balance"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""b2277b9d-4466-44f7-a2c4-a620d59f6840"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Balance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""084fbc00-084c-4898-9cf7-eb5c6c0e1d83"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Balance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -158,6 +199,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         // Base
         m_Base = asset.FindActionMap("Base", throwIfNotFound: true);
         m_Base_Movement = m_Base.FindAction("Movement", throwIfNotFound: true);
+        m_Base_Balance = m_Base.FindAction("Balance", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -208,11 +250,13 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Base;
     private IBaseActions m_BaseActionsCallbackInterface;
     private readonly InputAction m_Base_Movement;
+    private readonly InputAction m_Base_Balance;
     public struct BaseActions
     {
         private @PlayerActions m_Wrapper;
         public BaseActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Base_Movement;
+        public InputAction @Balance => m_Wrapper.m_Base_Balance;
         public InputActionMap Get() { return m_Wrapper.m_Base; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -225,6 +269,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_BaseActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_BaseActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_BaseActionsCallbackInterface.OnMovement;
+                @Balance.started -= m_Wrapper.m_BaseActionsCallbackInterface.OnBalance;
+                @Balance.performed -= m_Wrapper.m_BaseActionsCallbackInterface.OnBalance;
+                @Balance.canceled -= m_Wrapper.m_BaseActionsCallbackInterface.OnBalance;
             }
             m_Wrapper.m_BaseActionsCallbackInterface = instance;
             if (instance != null)
@@ -232,6 +279,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Balance.started += instance.OnBalance;
+                @Balance.performed += instance.OnBalance;
+                @Balance.canceled += instance.OnBalance;
             }
         }
     }
@@ -248,5 +298,6 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     public interface IBaseActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnBalance(InputAction.CallbackContext context);
     }
 }

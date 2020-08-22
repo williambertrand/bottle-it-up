@@ -6,6 +6,7 @@ TagManager:
   tags:
   - human
   - Canvas
+  - Needle
   layers:
   - Default
   - TransparentFX
