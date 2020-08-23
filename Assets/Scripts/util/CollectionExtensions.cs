@@ -18,5 +18,12 @@ namespace extensions
                 .Select(x => new KeyValuePair<TK, TV>(keyFunc.Invoke(x), valueFunc.Invoke(x)))
                 .ToDictionary(p => p.Key, p => p.Value);
         }
+
+        public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
+        {
+            foreach (var element in list) action.Invoke(element);
+        }
+
+        public static void InvokeAll(this IEnumerable<Action> l) => l.ForEach(e => e?.Invoke());
     }
 }

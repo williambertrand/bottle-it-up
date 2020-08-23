@@ -1,5 +1,4 @@
-﻿using System;
-using baseclasses;
+﻿using baseclasses;
 using UnityEngine;
 using extensions;
 using util;
@@ -11,12 +10,15 @@ public class PlayerController : MonoBehaviorWithInputs
     private Rigidbody _rb;
     public NeedleController needleController;
     public float moveSpeed = 3;
+    public float timeSpentAsMonsterSec = 3;
  
     private PerlinAxis _monstrosityNoise;
     
     public float MonstrosityLevel { get; private set; } = 1;
 
     public float BalanceInput { get; private set; }
+    
+    public bool IsMonster { get; private set; }
 
     private void Awake()
     {
@@ -40,6 +42,32 @@ public class PlayerController : MonoBehaviorWithInputs
                 canceled: _ => BalanceInput = 0
             );
         });
+    }
+
+    private void Start()
+    {
+        needleController.AddNeedleReachedMaxListener(OnUserLosesIt);
+    }
+
+    private void OnDestroy()
+    {
+        if (needleController)
+            needleController.RemoveNeedleReachedMaxListener(OnUserLosesIt);
+    }
+
+    private void OnUserLosesIt()
+    {
+        needleController.SetNeedleLocked(true);
+        Invoke(nameof(ReturnToHumanForm), timeSpentAsMonsterSec);
+        
+        IsMonster = true;
+    }
+
+    private void ReturnToHumanForm()
+    {
+        IsMonster = false;
+        needleController.ResetNeedleValue();
+        needleController.SetNeedleLocked(false);
     }
 
     private void Update()
