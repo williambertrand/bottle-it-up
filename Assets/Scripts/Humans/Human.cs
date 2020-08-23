@@ -10,7 +10,8 @@ namespace HumanStateManagement
     public class Human : MonoBehaviour
     {
 
-        public static float HUMAN_RUN_SPEED = 10.0f;
+        public static float HUMAN_RUN_SPEED = 4.0f;
+        public static float BASE_HUMAN_SPEEED = 0.75f;
 
         //Nav fields... public because we read from this in state machines
         public NavMeshAgent agent;
@@ -43,6 +44,9 @@ namespace HumanStateManagement
         // Start is called before the first frame update
         void Start()
         {
+
+            HumanSight sight = GetComponent<HumanSight>();
+
             stateMachine = new HumanStateHandler();
 
             atRest = new AtRestHumanState(this, stateMachine);
@@ -51,15 +55,12 @@ namespace HumanStateManagement
             moveToCheckout = new MoveToCheckoutHumanState(this, stateMachine);
             payAtCheckout = new PayAtCheckoutHumanState(this, stateMachine);
             exitStore = new ExitStoreHumanState(this, stateMachine);
-
-
-            HumanSight sight = GetComponent<HumanSight>();
-
             fearedState = new FearedHumanState(this, stateMachine, sight.player);
 
             stateMachine.Initialize(atRest);
 
             agent = GetComponent<NavMeshAgent>();
+            agent.speed = BASE_HUMAN_SPEEED; //TODO: could randomize this
 
             listSize = Random.Range(3, 8);
 
@@ -71,6 +72,10 @@ namespace HumanStateManagement
         // Update is called once per frame
         void Update()
         {
+            if(stateMachine == null || stateMachine.CurrentState == null)
+            {
+                Debug.LogError("NO Current state");
+            }
             stateMachine.CurrentState.Update();
         }
 
@@ -106,8 +111,11 @@ namespace HumanStateManagement
 
         private void OnDrawGizmos()
         {
-            string currentStateStr = stateMachine.CurrentState.ToString();
-            Handles.Label(transform.position + transform.up * 1.5f, currentStateStr);
+            if(stateMachine != null)
+            {
+                string currentStateStr = stateMachine.CurrentState.ToString() + " (" + agent.speed + ")";
+                Handles.Label(transform.position + transform.up * 1.5f, currentStateStr);
+            }
         }
     }
 

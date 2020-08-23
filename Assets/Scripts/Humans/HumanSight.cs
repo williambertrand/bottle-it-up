@@ -39,7 +39,7 @@ namespace HumanStateManagement
 
 
         /*
-         * Note we consider the radius of this collider to be equal to how far
+         * Note: we consider the radius of sightCollider to be equal to how far
          * a human can see
          * */
 
@@ -54,7 +54,6 @@ namespace HumanStateManagement
 
                 if (angle <= 0.5f * fieldOfView)
                 {
-                    Debug.DrawRay(transform.position + transform.up * PLAYER_HEIGHT, dir, Color.red, sightCollider.radius);
                     //Check for obstacle
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position + transform.up * PLAYER_HEIGHT,
@@ -78,13 +77,10 @@ namespace HumanStateManagement
                                 human.stateMachine.PushState(human.fearedState);
                             }
 
-                        }
-                        else
-                        {
-                            Debug.Log("HIT OBSTACLE:");
-                            Debug.Log(hit.collider.gameObject);
-                        }
+                            Debug.DrawLine(transform.position + transform.up * PLAYER_HEIGHT, transform.position + dir, Color.red, 1.0f);
 
+                        }
+                        
                     }
                 }
             }

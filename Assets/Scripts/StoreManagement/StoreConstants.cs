@@ -15,16 +15,16 @@ public static class StoreConstants
 {
 
     //At what Z position do the aisles start
-    public const float AisleStartZ = -0.0f;
+    public const float AisleStartZ = 5.0f;
 
     //At what Z position do the aisles end
-    public const float AisleEndZ = 10.0f;
+    public const float AisleEndZ = 40.0f;
 
     //At what X position is the first aisle
     // Vector3(AisleStartX, 0, AisleStartZ) should be bottom left of all aisles
-    public const float AisleStartX = -0.5f;
+    public const float AisleStartX = 6f;
 
-    public const float AisleWidth = 4.5f;
+    public const float AisleWidth = 10f;
     public const float AisleLength = AisleEndZ - AisleStartZ;
 
 

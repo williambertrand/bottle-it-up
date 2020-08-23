@@ -5,7 +5,7 @@ using UnityEngine;
 namespace HumanStateManagement
 {
     //TODO: Should probably define a MovingState that we inherit from for moving to item, to checkout, or to exit
-    public class MoveToCheckoutHumanState : HumanState
+    public class MoveToCheckoutHumanState : MoveHumanState
     {
 
         public MoveToCheckoutHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
@@ -31,6 +31,11 @@ namespace HumanStateManagement
             //TODO: Check if human has reached its destination
             if (!human.agent.pathPending && human.agent.remainingDistance < 0.75f)
                 stateMachine.ChangeState(human.payAtCheckout);
+        }
+
+        public override string ToString()
+        {
+            return "MoveToCheckout";
         }
 
     }

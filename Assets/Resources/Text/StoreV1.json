@@ -1,0 +1,83 @@
+{
+  "displayName": "Store V1",
+  "aisles": [
+    {
+      "name": "cereal",
+      "shelfCount": 6,
+      "itemLocations": [
+        {
+          "item": "cereal",
+          "shelf": 3
+        },
+        {
+          "item": "oatmeal",
+          "shelf": 4
+        },
+        {
+          "item": "cookies",
+          "shelf": 5
+        }
+      ]
+    },
+    {
+      "name": "drinks",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "soda",
+          "shelf": 1
+        },
+        {
+          "item": "water",
+          "shelf": 2
+        }
+      ]
+    },
+    {
+      "name": "canned",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "soup",
+          "shelf": 1
+        },
+        {
+          "item": "fruit",
+          "shelf": 2
+        }
+      ]
+    },
+    {
+      "name": "produce",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "tomato",
+          "shelf": 3
+        },
+        {
+          "item": "eggplant",
+          "shelf": 3
+        },
+        {
+          "item": "mushroom",
+          "shelf": 4
+        }
+      ]
+    },
+    {
+      "name": "frozen",
+      "shelfCount": 5,
+      "itemLocations": [
+        {
+          "item": "pizza",
+          "shelf": 3
+        },
+        {
+          "item": "iceCream",
+          "shelf": 4
+        }
+      ]
+    }
+  ]
+}
