@@ -32,6 +32,9 @@ public class NeedleController : MonoBehaviorWithInputs
     private void FixedUpdate()
     {
         if (_isLocked) return;
+
+        // set the balance level to slightly off so it's never totally static.
+        if (_balanceLevel.EqZero()) ResetNeedleValue();
         
         var balanceDelta =
             Time.deltaTime * CalcBalanceDeltaPerSec(_playerController.BalanceInput, _playerController.MonstrosityLevel);
@@ -62,6 +65,5 @@ public class NeedleController : MonoBehaviorWithInputs
 
     public void SetNeedleLocked(bool isLocked) => _isLocked = isLocked;
     
-    // set the balance level to slightly off so it's not static when the game starts.
     public void ResetNeedleValue() => _balanceLevel = RandomSign * 0.01f;
 }
