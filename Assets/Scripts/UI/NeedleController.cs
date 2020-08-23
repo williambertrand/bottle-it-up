@@ -1,6 +1,7 @@
 ﻿using baseclasses;
 using extensions;
 using UnityEngine;
+using static util.RandomExtensions;
 
 public class NeedleController : MonoBehaviorWithInputs
 {
@@ -14,6 +15,9 @@ public class NeedleController : MonoBehaviorWithInputs
     private void Start()
     {
         _playerController = PlayerController.Instance;
+        
+        // set the balance level to slightly off so it's not static when the game starts.
+        _balanceLevel = RandomSign * 0.01f;
     }
 
     private void FixedUpdate()
