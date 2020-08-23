@@ -12,6 +12,7 @@ namespace HumanStateManagement
 
         private float timeToCollect;
         private float startTime;
+        private string nextItem;
 
         public CollectItemHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
         {
@@ -30,6 +31,22 @@ namespace HumanStateManagement
         public override void Exit()
         {
             base.Exit();
+        }
+
+        public override void Pause()
+        {
+            base.Pause();
+            //Save item that was being collected?
+            nextItem = human.nextItem;
+        }
+
+        public override void Resume()
+        {
+            base.Resume();
+            //At this point we are away from the collect item, so probably need
+            // to go bakc into moveToItemState
+            human.agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
+            stateMachine.ChangeState(human.moveToItem);
         }
 
         public override void Update()

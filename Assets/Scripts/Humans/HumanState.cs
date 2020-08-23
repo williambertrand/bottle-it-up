@@ -27,6 +27,10 @@ namespace HumanStateManagement
 
         public virtual void Exit() { }
 
+        public virtual void Pause() { }
+
+        public virtual void Resume() { }
+
         public override string ToString() {
             return this.GetType().Name;
         }

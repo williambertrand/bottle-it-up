@@ -5,7 +5,7 @@ using UnityEngine;
 namespace HumanStateManagement
 {
     //TODO: Should probably define a MovingState that we inherit from for moving to item, to checkout, or to exit
-    public class MoveToItemHumanState : HumanState
+    public class MoveToItemHumanState : MoveHumanState
     {
 
         public MoveToItemHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
@@ -21,6 +21,16 @@ namespace HumanStateManagement
         public override void Exit()
         {
             base.Exit();
+        }
+
+        public override void Pause()
+        {
+            base.Pause();
+        }
+
+        public override void Resume()
+        {
+            base.Resume();
         }
 
         public override void Update()
