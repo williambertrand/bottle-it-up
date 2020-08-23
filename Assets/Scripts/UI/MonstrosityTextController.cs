@@ -28,7 +28,7 @@ public class MonstrosityTextController : MonoBehaviour
             var scaleAmt = Mathf.Sin(Time.time * freq).ReScale(-1, 1, 1f, 1.5f);
             t.localScale = Vector3.one * scaleAmt;
             
-            t.eulerAngles = t.eulerAngles.WithZ(Mathf.Sin(Time.time * 2 * freq) * _pc.MonstrosityLevel * 65);
+            t.eulerAngles = t.eulerAngles.WithZ(Mathf.Sin(Time.time * _pc.MonstrosityLevel.Interpolate(2, 7)) * _pc.MonstrosityLevel * 65);
         });
     }
 }
