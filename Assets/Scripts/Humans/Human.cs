@@ -65,7 +65,7 @@ namespace HumanStateManagement
             listSize = Random.Range(3, 8);
 
             //Useful for testing: Add time delay for shoppers to get moving
-            StartCoroutine(WakeUpAfter(0.25f));
+            StartCoroutine(WakeUpAfter(1.5f));
 
         }
 
@@ -99,6 +99,11 @@ namespace HumanStateManagement
             }
         }
 
+        public void OnEaten()
+        {
+            BloodController.Instance.SpawnSplatter(transform.position, SplatterAlignment.Floor);
+        }
+
 
         IEnumerator WakeUpAfter(float time)
         {
@@ -106,6 +111,9 @@ namespace HumanStateManagement
 
             nextItem = StoreController.Instance.store.GetRandomItem();
             agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
+
+            //TODO: TESTING THIS
+            OnEaten();
 
         }
 
