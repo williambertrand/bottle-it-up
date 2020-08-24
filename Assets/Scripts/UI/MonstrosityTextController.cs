@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using extensions;
+﻿using extensions;
 using UnityEngine;
-using static util.RandomExtensions;
-using Random = UnityEngine.Random;
 
 public class MonstrosityTextController : MonoBehaviour
 {

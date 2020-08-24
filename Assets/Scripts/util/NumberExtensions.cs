@@ -19,6 +19,7 @@ namespace extensions
         }
 
         public static bool EqZero(this float f) => Abs(f) < float.Epsilon;
+        public static bool SoftEquals(this float f, float that) => (f - that).EqZero();
 
         public static float Clamp(this float f, float min = -1, float max = -1) => Min(Max(f, min), max);
 
