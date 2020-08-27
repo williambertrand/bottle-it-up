@@ -2,6 +2,7 @@
 using UnityEngine;
 using extensions;
 using util;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviorWithInputs
 {
@@ -80,5 +81,14 @@ public class PlayerController : MonoBehaviorWithInputs
     {
         // Modify this if we want monstrosity to be calculated in some other way.
         MonstrosityLevel = _monstrosityNoise.GetValue().Squared();
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        if (IsMonster)
+        {
+            Handles.Label(transform.position + (transform.up * 1.5f), "Monster");
+        }
     }
 }

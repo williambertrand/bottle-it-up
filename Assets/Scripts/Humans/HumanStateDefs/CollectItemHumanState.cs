@@ -5,7 +5,7 @@ using UnityEngine;
 namespace HumanStateManagement
 {
     //TODO: Should probably define a MovingState that we inherit from for moving to item, to checkout, or to exit
-    public class CollectItemHumanState : HumanState
+    public class CollectItemHumanState : IdleHumanState
     {
         public const float MAX_PICKUP = 3.0f;
         public const float MIN_PICKUP = 1.25f;
@@ -14,7 +14,7 @@ namespace HumanStateManagement
         private float startTime;
         private string nextItem;
 
-        public CollectItemHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
+        public CollectItemHumanState(Human human, HumanStateHandler stateMachine, Animator animator) : base(human, stateMachine, animator)
         {
 
         }

@@ -9,13 +9,16 @@ namespace HumanStateManagement
     public class FearedHumanState : HumanState
     {
         GameObject player;
+        Animator animator;
 
         public FearedHumanState(
             Human human,
             HumanStateHandler stateMachine,
-            GameObject Player) : base(human, stateMachine)
+            GameObject Player,
+            Animator animator) : base(human, stateMachine)
         {
             player = Player;
+            this.animator = animator;
         }
 
         public override void Enter()
@@ -37,8 +40,7 @@ namespace HumanStateManagement
             human.agent.speed = Human.HUMAN_RUN_SPEED;
             human.agent.destination = finalPosition;
 
-
-            //TODO: Set feared/running animation here
+            animator.SetTrigger("Run");
         }
 
         public override void Exit()
@@ -54,7 +56,6 @@ namespace HumanStateManagement
             //TODO: Check if human has reached its destination
             if (!human.agent.pathPending && human.agent.remainingDistance < 0.6f)
             {
-                Debug.Log("Human reached dest");
                 //TODO: Check to see if player is still within FEAR distance,
                 //if so, choose new location and keep running
 

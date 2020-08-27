@@ -15,12 +15,11 @@ public class BloodController : MonoBehaviour
     public int numTextures;
     public static BloodController Instance;
 
-    //Include all blood splatter textures in resources/blood
-    //in format blood_0X
-    Texture[] bloodTextures;
-
+    //Include all blood splatter materials in resources/blood
+    //in format splat_X
+    
     private int useNext;
-    Material baseMaterial;
+    Material[] splatterMaterials;
 
 
     private void Awake()
@@ -30,13 +29,12 @@ public class BloodController : MonoBehaviour
             Instance = this;
         }
 
-        bloodTextures = new Texture[numTextures];
+        splatterMaterials = new Material[numTextures];
 
         for (int i = 0; i < numTextures; i++)
         {
-            bloodTextures[i] = Resources.Load<Texture>("Blood/blood_" + i) as Texture;
+            splatterMaterials[i] = Resources.Load<Material>("Blood/splat_" + i) as Material;
         }
-        baseMaterial = (Material)Resources.Load("Blood/Base");
 
         useNext = 0;
 
@@ -51,7 +49,7 @@ public class BloodController : MonoBehaviour
         
     }
 
-    public void SpawnSplatter(Vector3 pos, SplatterAlignment align)
+    public void SpawnSplatter(Vector3 pos, float rot, SplatterAlignment align)
     {
         GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
         quad.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f); //TODO this may change based on our texture sizes
@@ -60,18 +58,16 @@ public class BloodController : MonoBehaviour
         {
             //Note: This is East wall
             case SplatterAlignment.Wall:
-                quad.transform.rotation = Quaternion.Euler(0, 0, 0);
+                quad.transform.rotation = Quaternion.Euler(0, rot, 0);
                 break;
             case SplatterAlignment.Floor:
             default:
-                quad.transform.rotation = Quaternion.Euler(90, 0, 0);
+                quad.transform.rotation = Quaternion.Euler(90, rot, 0);
                 quad.transform.position = new Vector3(pos.x, 0.02f, pos.z);
                 break;
         }
         Renderer quadRender = quad.GetComponent<Renderer>();
-        quadRender.material = baseMaterial;
-        quadRender.material.SetTexture("_MainTex", bloodTextures[useNext]);
-        quadRender.material.mainTexture = bloodTextures[useNext];
+        quadRender.material = splatterMaterials[useNext];
         useNext++;
     }
 }

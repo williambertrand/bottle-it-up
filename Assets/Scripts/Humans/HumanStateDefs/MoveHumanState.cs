@@ -9,15 +9,17 @@ namespace HumanStateManagement
     {
 
         private Vector3 navDest;
+        private Animator animator;
 
-        public MoveHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
+        public MoveHumanState(Human human, HumanStateHandler stateMachine, Animator animator) : base(human, stateMachine)
         {
-
+            this.animator = animator;
         }
 
         public override void Enter()
         {
             base.Enter();
+            animator.SetTrigger("Walk");
         }
 
         public override void Exit()

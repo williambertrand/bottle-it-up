@@ -22,9 +22,9 @@ public static class StoreConstants
 
     //At what X position is the first aisle
     // Vector3(AisleStartX, 0, AisleStartZ) should be bottom left of all aisles
-    public const float AisleStartX = 6f;
+    public const float AisleStartX = 6.25f;
 
-    public const float AisleWidth = 10f;
+    public const float AisleWidth = 10.5f;
     public const float AisleLength = AisleEndZ - AisleStartZ;
 
 

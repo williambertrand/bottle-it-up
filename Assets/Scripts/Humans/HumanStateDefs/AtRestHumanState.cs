@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace HumanStateManagement
 {
-    public class AtRestHumanState : HumanState
+    public class AtRestHumanState : IdleHumanState
     {
 
-        public AtRestHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
+        public AtRestHumanState(Human human, HumanStateHandler stateMachine, Animator animator) : base(human, stateMachine, animator)
         {
 
         }

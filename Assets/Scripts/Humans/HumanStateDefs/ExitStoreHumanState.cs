@@ -8,7 +8,7 @@ namespace HumanStateManagement
     public class ExitStoreHumanState : MoveHumanState
     {
 
-        public ExitStoreHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
+        public ExitStoreHumanState(Human human, HumanStateHandler stateMachine, Animator animator) : base(human, stateMachine, animator)
         {
 
         }

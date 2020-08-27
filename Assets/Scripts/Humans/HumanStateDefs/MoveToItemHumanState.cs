@@ -8,7 +8,10 @@ namespace HumanStateManagement
     public class MoveToItemHumanState : MoveHumanState
     {
 
-        public MoveToItemHumanState(Human human, HumanStateHandler stateMachine) : base(human, stateMachine)
+        public MoveToItemHumanState(
+            Human human,
+            HumanStateHandler stateMachine,
+            Animator animator) : base(human, stateMachine, animator)
         {
 
         }
@@ -38,8 +41,11 @@ namespace HumanStateManagement
             base.Update();
 
             //TODO: Check if human has reached its destination
-            if (!human.agent.pathPending && human.agent.remainingDistance < 0.6f)
+            if (!human.agent.pathPending && human.agent.remainingDistance < 0.75f)
+            {
+                Debug.Log("MOVE TO COLLECT!!!");
                 stateMachine.ChangeState(human.collectItem);
+            }
         }
 
         public override string ToString()

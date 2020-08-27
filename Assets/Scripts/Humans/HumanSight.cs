@@ -14,7 +14,7 @@ namespace HumanStateManagement
         public bool playerInSight;
         public SphereCollider sightCollider;
 
-        public GameObject player;
+        public PlayerController player;
         public Human human;
 
         // Start is called before the first frame update
@@ -22,27 +22,27 @@ namespace HumanStateManagement
         {
             sightCollider = GetComponent<SphereCollider>();
             human = GetComponent<Human>();
+            player = PlayerController.Instance;
 
         }
 
-        /***
-         *  Conditions for player to be in sight:
-         *  - Within trigger
-         *  - within human FOV
-         *  - No obstacles blocking
-         * 
-         */
         void Update()
         {
 
         }
 
 
-        /*
-         * Note: we consider the radius of sightCollider to be equal to how far
-         * a human can see
-         * */
 
+        /***
+         *  Conditions for player to be in sight:
+         *  - Within trigger
+         *  - within human FOV
+         *  - No obstacles blocking
+         *
+         *  Note: we consider the radius of sightCollider to be equal to how far
+         *  a human can see
+         * 
+         */
         private void OnTriggerStay(Collider other)
         {
             if (other.gameObject == player)
@@ -61,24 +61,22 @@ namespace HumanStateManagement
                         out hit,
                         sightCollider.radius))
                     {
-                        if (hit.collider.gameObject == player)
+                        if (hit.collider.gameObject == player.gameObject)
                         {
                             playerInSight = true;
                             //If we need to handle keeping track of last player position, do it here
                             //lastSightingPos = player.transform.position or whatever
 
-                            //TODO: Testing feared state here
-                            //if(player.monsterValue >= fearThreshold)
-                            //{
-
-                            //}
-                            if(human.stateMachine.CurrentState != human.fearedState)
+                            if (player.IsMonster)
                             {
-                                human.stateMachine.PushState(human.fearedState);
+                                if (human.stateMachine.CurrentState != human.fearedState)
+                                {
+                                    human.stateMachine.PushState(human.fearedState);
+                                }
+
                             }
 
                             Debug.DrawLine(transform.position + transform.up * PLAYER_HEIGHT, transform.position + dir, Color.red, 1.0f);
-
                         }
                         
                     }

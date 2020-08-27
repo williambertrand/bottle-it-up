@@ -7,11 +7,12 @@ using UnityEditor;
 
 namespace HumanStateManagement
 {
+    [RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(HumanSight))]
     public class Human : MonoBehaviour
     {
 
-        public static float HUMAN_RUN_SPEED = 4.0f;
-        public static float BASE_HUMAN_SPEEED = 0.75f;
+        public static float HUMAN_RUN_SPEED = 20.0f;
+        public static float BASE_HUMAN_SPEEED = 8.75f;
 
         //Nav fields... public because we read from this in state machines
         public NavMeshAgent agent;
@@ -46,16 +47,17 @@ namespace HumanStateManagement
         {
 
             HumanSight sight = GetComponent<HumanSight>();
+            Animator animamator = GetComponent<Animator>();
 
             stateMachine = new HumanStateHandler();
 
-            atRest = new AtRestHumanState(this, stateMachine);
-            moveToItem = new MoveToItemHumanState(this, stateMachine);
-            collectItem = new CollectItemHumanState(this, stateMachine);
-            moveToCheckout = new MoveToCheckoutHumanState(this, stateMachine);
-            payAtCheckout = new PayAtCheckoutHumanState(this, stateMachine);
-            exitStore = new ExitStoreHumanState(this, stateMachine);
-            fearedState = new FearedHumanState(this, stateMachine, sight.player);
+            atRest = new AtRestHumanState(this, stateMachine, animamator);
+            moveToItem = new MoveToItemHumanState(this, stateMachine, animamator);
+            collectItem = new CollectItemHumanState(this, stateMachine, animamator);
+            moveToCheckout = new MoveToCheckoutHumanState(this, stateMachine, animamator);
+            payAtCheckout = new PayAtCheckoutHumanState(this, stateMachine, animamator);
+            exitStore = new ExitStoreHumanState(this, stateMachine, animamator);
+            fearedState = new FearedHumanState(this, stateMachine, sight.player.gameObject, animamator);
 
             stateMachine.Initialize(atRest);
 
@@ -65,7 +67,7 @@ namespace HumanStateManagement
             listSize = Random.Range(3, 8);
 
             //Useful for testing: Add time delay for shoppers to get moving
-            StartCoroutine(WakeUpAfter(1.5f));
+            StartCoroutine(WakeUpAfter(0.5f));
 
         }
 
@@ -90,8 +92,11 @@ namespace HumanStateManagement
             }
             else if (basketSize < listSize)
             {
+                Debug.Log("Previous item: " + nextItem);
                 nextItem = StoreController.Instance.store.GetRandomItem();
                 agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
+                Debug.Log("Next item: " + nextItem);
+                Debug.Log("---------");
             }
             else
             {
@@ -101,29 +106,32 @@ namespace HumanStateManagement
 
         public void OnEaten()
         {
-            BloodController.Instance.SpawnSplatter(transform.position, SplatterAlignment.Floor);
+            BloodController.Instance.SpawnSplatter(transform.position, Random.Range(0, 360), SplatterAlignment.Floor);
+
+            //Make sure this
+            HumanController.Instance.OnHumanEaten(this);
+            Destroy(gameObject);
         }
 
 
         IEnumerator WakeUpAfter(float time)
         {
             yield return new WaitForSeconds(time);
-
             nextItem = StoreController.Instance.store.GetRandomItem();
             agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
-
-            //TODO: TESTING THIS
-            OnEaten();
-
         }
 
         private void OnDrawGizmos()
         {
-            if(stateMachine != null)
+            if(stateMachine != null && agent != null)
             {
                 string currentStateStr = stateMachine.CurrentState.ToString() + " (" + agent.speed + ")";
                 Handles.Label(transform.position + transform.up * 1.5f, currentStateStr);
             }
+            else if (stateMachine == null)
+            {}
+            else if (agent == null)
+            {}
         }
     }
 
