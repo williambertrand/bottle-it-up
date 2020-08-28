@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviorWithInputs
     public NeedleController needleController;
     public float moveSpeed = 3;
     public float timeSpentAsMonsterSec = 3;
+    public Camera camera;
  
     private PerlinAxis _monstrosityNoise;
     
@@ -73,8 +74,9 @@ public class PlayerController : MonoBehaviorWithInputs
 
     private void Update()
     {
-        var camAdjustedMoveInput = transform.rotation * _moveInput;
+        var camAdjustedMoveInput = camera.transform.rotation * _moveInput;
         _rb.velocity = camAdjustedMoveInput * moveSpeed;
+        transform.rotation = Quaternion.LookRotation(_rb.velocity.normalized);
     }
 
     private void FixedUpdate()

@@ -62,6 +62,7 @@ namespace HumanStateManagement
             stateMachine.Initialize(atRest);
 
             agent = GetComponent<NavMeshAgent>();
+            agent.updateRotation = false;
             agent.speed = BASE_HUMAN_SPEEED; //TODO: could randomize this
 
             listSize = Random.Range(3, 8);
@@ -81,6 +82,11 @@ namespace HumanStateManagement
             stateMachine.CurrentState.Update();
         }
 
+        private void LateUpdate()
+        {
+            transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+        }
+
         /* Collect item, Get Next Item */
         public void OnFinishPickup()
         {
@@ -92,11 +98,8 @@ namespace HumanStateManagement
             }
             else if (basketSize < listSize)
             {
-                Debug.Log("Previous item: " + nextItem);
                 nextItem = StoreController.Instance.store.GetRandomItem();
                 agent.destination = StoreController.Instance.store.GetItemLocation(nextItem);
-                Debug.Log("Next item: " + nextItem);
-                Debug.Log("---------");
             }
             else
             {

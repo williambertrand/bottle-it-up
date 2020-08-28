@@ -43,7 +43,6 @@ namespace HumanStateManagement
             //TODO: Check if human has reached its destination
             if (!human.agent.pathPending && human.agent.remainingDistance < 0.75f)
             {
-                Debug.Log("MOVE TO COLLECT!!!");
                 stateMachine.ChangeState(human.collectItem);
             }
         }
