@@ -8,6 +8,8 @@ public class LightingController : MonoBehaviour
     public GameObject lightParent;
     public Light[] storeLights;
     public Animator[] lightAnimators;
+    public bool monsterLightingActive;
+
     // Start is called before the first frame update
     public bool isFlashing;
 
@@ -31,6 +33,13 @@ public class LightingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(PlayerController.Instance.IsMonster && !monsterLightingActive)
+        {
+            monsterLightingActive = true;
+            EnterMonsterModeLighting();
+            Invoke(nameof(ExitMonsterModeLighting), PlayerController.Instance.timeSpentAsMonsterSec);
+        }
 
     }
 
@@ -62,5 +71,6 @@ public class LightingController : MonoBehaviour
                 lightAnimators[i].SetBool("Flashing", false);
             }
         }
+        monsterLightingActive = false; 
     }
 }
