@@ -95,8 +95,8 @@ public class PlayerController : MonoBehaviorWithInputs
     }
 
     private const float MetersVeryClose = 5;
-    private const float MetersClose = 5;
-    private const float MetersMidDistance = 5;
+    private const float MetersClose = 10;
+    private const float MetersMidDistance = 20;
     private float CalculateCloseness()
     {
         var numHumansMidDistance = 0;
