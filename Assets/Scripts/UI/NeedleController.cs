@@ -54,7 +54,7 @@ public class NeedleController : MonoBehaviorWithInputs
     {
         var deltaFromPrevBalance = _balanceLevel * 0.9f;
 
-        return (playerInput + deltaFromPrevBalance) * (1 + monstrosityValue.Interpolate(0, 5));
+        return (playerInput + deltaFromPrevBalance) * (1 + monstrosityValue.Interpolate(0, 3));
     }
 
     public void AddNeedleReachedMaxListener(Action onNeedleReachedMaxListener) =>

@@ -1,6 +1,9 @@
-﻿using baseclasses;
+﻿using System;
+using System.Collections.Generic;
+using baseclasses;
 using UnityEngine;
 using extensions;
+using HumanStateManagement;
 using util;
 using UnityEditor;
 
@@ -15,7 +18,9 @@ public class PlayerController : MonoBehaviorWithInputs
     public Camera camera;
  
     private PerlinAxis _monstrosityNoise;
-    
+
+    public HashSet<GameObject> humanObjects = new HashSet<GameObject>();
+
     public float MonstrosityLevel { get; private set; } = 1;
 
     public float BalanceInput { get; private set; }
@@ -32,6 +37,7 @@ public class PlayerController : MonoBehaviorWithInputs
         _rb = GetComponent<Rigidbody>();
         
         needleController = needleController == null ? GameObjectExtensions.FindComponentByTag<NeedleController>("Needle") : needleController;
+        
         InputActions.Base.Let(i =>
         {
             i.Movement.AddListeners<Vector2>(
@@ -44,6 +50,15 @@ public class PlayerController : MonoBehaviorWithInputs
                 canceled: _ => BalanceInput = 0
             );
         });
+        
+        Human.OnHumanSpawn += HandleHumanSpawn;
+        Human.OnHumanDiedOrLeftStore += HandleHumanDiedOrLeftStore;
+    }
+
+    private void OnDisable()
+    {
+        Human.OnHumanSpawn -= HandleHumanSpawn;
+        Human.OnHumanDiedOrLeftStore -= HandleHumanDiedOrLeftStore;
     }
 
     private void Start()
@@ -79,10 +94,32 @@ public class PlayerController : MonoBehaviorWithInputs
         transform.rotation = Quaternion.LookRotation(_rb.velocity.normalized);
     }
 
+    private const float MetersVeryClose = 5;
+    private const float MetersClose = 5;
+    private const float MetersMidDistance = 5;
+    private float CalculateCloseness()
+    {
+        var numHumansMidDistance = 0;
+        var numHumansClose = 0;
+        var numHumansVeryClose = 0;
+
+        humanObjects.ForEach(go =>
+        {
+            var dist = (gameObject.transform.position - go.transform.position).magnitude;
+            if (dist < MetersVeryClose) numHumansVeryClose++;
+            else if (dist < MetersClose) numHumansClose++;
+            else if (dist < MetersMidDistance) numHumansMidDistance++;
+        });
+
+        return (numHumansVeryClose * 0.33f + numHumansClose * 0.1f + numHumansMidDistance * 0.05f)
+            .Clamp(max: 1f);
+    }
+
     private void FixedUpdate()
     {
-        // Modify this if we want monstrosity to be calculated in some other way.
-        MonstrosityLevel = _monstrosityNoise.GetValue().Squared();
+        var closenessToOtherHumans = CalculateCloseness();
+        var noiseValue = _monstrosityNoise.GetValue().Squared();
+        MonstrosityLevel = noiseValue.Interpolate(0, 0.25f) + closenessToOtherHumans.Interpolate(0, 0.75f);
     }
 
 
@@ -93,4 +130,8 @@ public class PlayerController : MonoBehaviorWithInputs
             Handles.Label(transform.position + (transform.up * 1.5f), "Monster");
         }
     }
+
+    private void HandleHumanSpawn(GameObject g) => humanObjects.Add(g);
+
+    private void HandleHumanDiedOrLeftStore(GameObject g) => humanObjects.Remove(g);
 }

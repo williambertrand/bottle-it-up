@@ -47,5 +47,8 @@ namespace extensions
             var entries = d.Select(p => $"\"{p.Key}\": [{string.Join(",", p.Value)}]");
             return "{" + string.Join(",", entries) + "}";
         }
+
+        public static TV FirstValue<TK, TV>(this Dictionary<TK, TV> d, Func<TK, TV, bool> f) => 
+            d.First(pair => f.Invoke(pair.Key, pair.Value)).Value;
     }
 }

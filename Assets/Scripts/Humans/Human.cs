@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEditor;
+using Random = UnityEngine.Random;
 
 
 namespace HumanStateManagement
 {
+    public delegate void Notify(GameObject go);
     [RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(HumanSight))]
     public class Human : MonoBehaviour
     {
@@ -37,6 +40,9 @@ namespace HumanStateManagement
         public ExitStoreHumanState exitStore;
 
         public FearedHumanState fearedState;
+        
+        public static event Notify OnHumanSpawn;
+        public static event Notify OnHumanDiedOrLeftStore;
 
         //NOTE: When a state does not rely on any particulars of the human
         //      for which it is being used, it should be defined as a static state.
@@ -70,6 +76,12 @@ namespace HumanStateManagement
             //Useful for testing: Add time delay for shoppers to get moving
             StartCoroutine(WakeUpAfter(0.5f));
 
+            OnHumanSpawn?.Invoke(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            OnHumanDiedOrLeftStore?.Invoke(gameObject);
         }
 
         // Update is called once per frame
