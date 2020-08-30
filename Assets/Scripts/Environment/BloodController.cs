@@ -52,7 +52,7 @@ public class BloodController : MonoBehaviour
     public void SpawnSplatter(Vector3 pos, float rot, SplatterAlignment align)
     {
         GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        quad.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f); //TODO this may change based on our texture sizes
+        quad.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f); //TODO this may change based on our texture sizes
         quad.transform.position = pos;
         switch (align)
         {
@@ -68,6 +68,11 @@ public class BloodController : MonoBehaviour
         }
         Renderer quadRender = quad.GetComponent<Renderer>();
         quadRender.material = splatterMaterials[useNext];
+
         useNext++;
+        if(useNext >= numTextures)
+        {
+            useNext = 0;
+        }
     }
 }

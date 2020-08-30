@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using extensions;
 
 
 namespace HumanStateManagement
@@ -45,7 +46,7 @@ namespace HumanStateManagement
          */
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject == player)
+            if (other.gameObject == player.gameObject)
             {
                 playerInSight = false;
                 //If angle between human forward and player is half of FOV, in sight
@@ -54,12 +55,14 @@ namespace HumanStateManagement
 
                 if (angle <= 0.5f * fieldOfView)
                 {
+                    int layerMask = 1 << 8;
                     //Check for obstacle
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position + transform.up * PLAYER_HEIGHT,
                         dir.normalized,
                         out hit,
-                        sightCollider.radius))
+                        sightCollider.radius,
+                        layerMask))
                     {
                         if (hit.collider.gameObject == player.gameObject)
                         {
@@ -69,16 +72,39 @@ namespace HumanStateManagement
 
                             if (player.IsMonster)
                             {
-                                if (human.stateMachine.CurrentState != human.fearedState)
+                                Debug.DrawLine(transform.position + transform.up * PLAYER_HEIGHT, transform.position + dir, Color.red, 1.0f);
+                                //Squared distance between human and player
+                                float playerDist = transform.position.DistanceSquared(player.gameObject.transform.position);
+                                Debug.Log("DIST: " + playerDist);
+                                if (playerDist <= GameConstants.PLAYER_EAT_DISTANCE)
                                 {
-                                    human.stateMachine.PushState(human.fearedState);
+                                    Debug.Log("EAT: " + playerDist);
+                                    //eat the human
+                                    human.OnEaten();
+                                }
+                                else if (playerDist <= GameConstants.PLAYER_FEAR_DISTANCE)
+                                {
+                                    Debug.Log("FEARED: " + playerDist);
+                                    //Human enters fear state
+                                    if (human.stateMachine.CurrentState != human.fearedState)
+                                    {
+                                        human.stateMachine.PushState(human.fearedState);
+                                    }
+                                }
+                                else
+                                {
+                                    //Ignore the player monster
+                                    Debug.Log("IGNORE: " + playerDist);
                                 }
 
                             }
 
-                            Debug.DrawLine(transform.position + transform.up * PLAYER_HEIGHT, transform.position + dir, Color.red, 1.0f);
                         }
-                        
+                        else
+                        {
+                            Debug.Log("Somethin else!");
+                            Debug.Log(hit.collider.gameObject);
+                        }
                     }
                 }
             }

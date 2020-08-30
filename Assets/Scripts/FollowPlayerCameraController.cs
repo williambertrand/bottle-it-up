@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 [RequireComponent(typeof(Camera))]
 public class FollowPlayerCameraController : MonoBehaviour
 {
@@ -80,6 +81,11 @@ public class FollowPlayerCameraController : MonoBehaviour
 			    UnityEditor.EditorApplication.isPlaying = false;
             #endif
 		}
+	}
+
+    public void setMonsterEffectLevel(float level)
+    {
+		//TODO: Set blur/shake/vignette level
 	}
 
 }

@@ -45,6 +45,12 @@ namespace HumanStateManagement
 
         public void SpawnHuman()
         {
+
+            if(prefabs.Length == 0)
+            {
+                return;
+            }
+
             GameObject humanPrefab = prefabs[Random.Range(0, prefabs.Length)];
             GameObject newHuman = Instantiate(humanPrefab, humanSpawnLocation.position, Quaternion.identity);
         }
@@ -52,6 +58,8 @@ namespace HumanStateManagement
         public void OnHumanEaten(Human human)
         {
             //Not exactly sure what we need to do here...
+            //If we are keeping track of all humans remove this one here 
+            GameController.Instance.OnHumanEaten();
         }
     }
 

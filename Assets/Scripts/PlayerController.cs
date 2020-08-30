@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviorWithInputs
     public static PlayerController Instance; 
     private Vector3 _moveInput = Vector3.zero;
     private Rigidbody _rb;
+    private Animator _animator;
     public NeedleController needleController;
     public float moveSpeed = 3;
     public float timeSpentAsMonsterSec = 3;
@@ -30,7 +31,8 @@ public class PlayerController : MonoBehaviorWithInputs
         _monstrosityNoise = new PerlinAxis(0.2f);
         
         _rb = GetComponent<Rigidbody>();
-        
+        _animator = GetComponent<Animator>();
+
         needleController = needleController == null ? GameObjectExtensions.FindComponentByTag<NeedleController>("Needle") : needleController;
         InputActions.Base.Let(i =>
         {
@@ -76,7 +78,10 @@ public class PlayerController : MonoBehaviorWithInputs
     {
         var camAdjustedMoveInput = camera.transform.rotation * _moveInput;
         _rb.velocity = camAdjustedMoveInput * moveSpeed;
-        transform.rotation = Quaternion.LookRotation(_rb.velocity.normalized);
+        if (_rb.velocity.magnitude > 0.0f)
+        {
+            transform.rotation = Quaternion.LookRotation(_rb.velocity.normalized);
+        }
     }
 
     private void FixedUpdate()

@@ -84,7 +84,10 @@ namespace HumanStateManagement
 
         private void LateUpdate()
         {
-            transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+            if (agent.velocity.magnitude != 0.0f)
+            {
+                transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+            }
         }
 
         /* Collect item, Get Next Item */
@@ -110,10 +113,14 @@ namespace HumanStateManagement
         public void OnEaten()
         {
             BloodController.Instance.SpawnSplatter(transform.position, Random.Range(0, 360), SplatterAlignment.Floor);
-
-            //Make sure this
             HumanController.Instance.OnHumanEaten(this);
             Destroy(gameObject);
+        }
+
+        //Called from HumanSight
+        public void OnPlayerSeen()
+        {
+
         }
 
 
