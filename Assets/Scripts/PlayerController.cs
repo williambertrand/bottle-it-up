@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviorWithInputs
     public static PlayerController Instance; 
     private Vector3 _moveInput = Vector3.zero;
     private Rigidbody _rb;
+    private Vector3 initialForward;
     public NeedleController needleController;
     public float moveSpeed = 3;
     public float timeSpentAsMonsterSec = 3;
@@ -53,6 +54,8 @@ public class PlayerController : MonoBehaviorWithInputs
         
         Human.OnHumanSpawn += HandleHumanSpawn;
         Human.OnHumanDiedOrLeftStore += HandleHumanDiedOrLeftStore;
+
+        initialForward = gameObject.transform.forward;
     }
 
     private void OnDisable()
@@ -89,7 +92,7 @@ public class PlayerController : MonoBehaviorWithInputs
 
     private void Update()
     {
-        var camAdjustedMoveInput = camera.transform.rotation * _moveInput;
+        var camAdjustedMoveInput = Quaternion.FromToRotation(Vector3.forward, initialForward) * _moveInput;
         _rb.velocity = camAdjustedMoveInput * moveSpeed;
         transform.rotation = Quaternion.LookRotation(_rb.velocity.normalized);
     }
